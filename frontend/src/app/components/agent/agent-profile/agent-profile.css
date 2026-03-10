@@ -1,0 +1,296 @@
+/* 1. Global Reset - Eliminates all browser-level scrolling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* Total lock on screen movement */
+}
+
+:host {
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  --card-bg: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --radius: 16px;
+}
+
+/* 2. Layout Structure - Locked to 100vh */
+.profile-page {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  overflow: hidden;
+}
+
+/* Sidebar - Fixed */
+app-sidebar {
+  width: 200px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+  height: 100%;
+}
+
+/* 3. Main Content - Centers everything and kills overflow */
+.profile-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  padding: 1rem; /* Compact padding */
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Header - Smaller and Tight */
+.profile-header {
+  width: 100%;
+  max-width: 850px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.profile-header h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #1e293b, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 4. The Profile Card - Shrinks to fit within view */
+.profile-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  width: 100%;
+  max-width: 850px;
+  /* Leaves 100px gap for header and page padding */
+  max-height: calc(100vh - 100px); 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 5. The Form - Internal scroll enabled but scrollbar hidden */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; 
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.profile-form::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Avatar Section - Compacted */
+.avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.avatar-large {
+  width: 60px;
+  height: 60px;
+  background: #f1f5f9;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Section Styling - Tight spacing */
+.section {
+  margin-bottom: 1rem;
+}
+
+.section h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section h3::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(to right, #e2e8f0, transparent);
+}
+
+/* Input Fields - Optimized height */
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  color: #475569;
+}
+
+input {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: #f8fafc;
+  transition: border 0.2s;
+}
+
+input:focus {
+  border: 1px solid var(--primary);
+  background: #fff;
+}
+
+/* Buttons and Actions - Pinned to bottom of card */
+.actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: auto; 
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-save {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #f1f5f9;
+  color: var(--text-muted);
+  border: 1px solid #e2e8f0;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
+}
+/* ... Keep Global Reset and Layout Structure same as before ... */
+
+/* 3. Main Content - Flex increased for a bigger feel */
+.profile-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  padding: 2rem; /* Increased padding */
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Header - Matches the bigger card width */
+.profile-header {
+  width: 100%;
+  max-width: 1000px; /* Increased from 850px */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* 4. The Profile Card - Bigger and roomier */
+.profile-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  padding: 3rem; /* Increased internal padding for a "bigger" feel */
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  width: 100%;
+  max-width: 1000px; /* Increased from 850px */
+  max-height: calc(100vh - 120px); 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 5. Fixed/Locked Field Styling (Agent ID & Role) */
+input.readonly-field {
+  background-color: #e2e8f0 !important; /* Noticeable gray */
+  color: #64748b !important;
+  border: 1px solid #cbd5e1 !important;
+  cursor: not-allowed;
+  pointer-events: none; /* Disables interaction */
+}
+
+/* Edit Button - Guaranteed Visibility */
+.btn-edit {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: block; /* Ensures it shows */
+  transition: background 0.2s;
+}
+
+.btn-edit:hover {
+  background: var(--primary-hover);
+}
+
+/* ... Keep rows and labels same ... */
+
+/* Mode when viewing (non-fixed fields) */
+input.view-mode {
+  border-color: transparent;
+  background-color: transparent;
+  padding-left: 0;
+  cursor: default;
+}
+btn-upload{
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 10px;
+  font-weight: 600;
+  border-color: black;
+}

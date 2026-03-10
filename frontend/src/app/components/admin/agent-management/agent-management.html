@@ -1,0 +1,144 @@
+
+<div class="agent-management-container">
+  <h2>Agent Management</h2>
+  <button class="btn btn-primary" (click)="addAgent()">Add Agent</button>
+
+  <table class="agent-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <!-- Role column removed -->
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let agent of agents; trackBy: trackByAgentId">
+        <td>{{ agent.agentid }}</td>
+        <td>{{ agent.name }}</td>
+        <td>{{ agent.email }}</td>
+        <td>{{ agent.phone }}</td>
+        <!-- Role cell removed -->
+        <td>
+          <button class="btn btn-secondary" (click)="editAgent(agent)">Edit</button>
+          <button class="btn btn-danger" (click)="deleteAgent(agent.agentid)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal for Add/Edit -->
+  <div class="modal" *ngIf="isEditing">
+    <div class="modal-content">
+      <span class="close" (click)="cancelEdit()">&times;</span>
+      <h3>{{ isNew ? 'Add Agent' : 'Edit Agent' }}</h3>
+
+      <!-- Error Message -->
+      <div
+        class="error-message"
+        *ngIf="errorMessage && !emailExists"
+        style="color: #fff; padding: 12px; margin-bottom: 15px; border: 1px solid #f5c6cb; border-radius: 6px; background-color: #f8d7da;"
+      >
+        {{ errorMessage }}
+      </div>
+
+      <form (ngSubmit)="saveAgent()" #agentForm="ngForm" novalidate>
+        <!-- Agent ID field: editable for new, read-only for edit -->
+        <div class="form-group">
+          <label for="agentid">Agent ID:</label>
+          <input
+            type="text"
+            id="agentid"
+            [(ngModel)]="selectedAgent.agentid"
+            name="agentid"
+            [readOnly]="!isNew"
+            required
+            [pattern]="agentIdPattern"
+            (input)="validateAgentIdUniqueness()"
+            #agentid="ngModel"
+            placeholder="e.g., A-123"
+          />
+          <small class="text-muted">Format: A-### (e.g., A-123)</small>
+          <div class="error-text" *ngIf="agentid.invalid && (agentid.touched || formSubmitted)">
+            <span *ngIf="agentid.errors?.['required']">Agent ID is required</span>
+            <span *ngIf="agentid.errors?.['pattern']">Agent ID must be in the format A-### (e.g., A-123)</span>
+          </div>
+          <div class="error-text" *ngIf="agentIdExists && isNew">
+            Agent ID already exists
+          </div>
+        </div>
+
+        <!-- Name -->
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            [(ngModel)]="selectedAgent.name"
+            name="name"
+            required
+            [pattern]="namePattern"
+            #name="ngModel"
+            placeholder="Enter name (alphabets only)"
+          />
+          <div class="error-text" *ngIf="name.invalid && (name.touched || formSubmitted)">
+            <span *ngIf="name.errors?.['required']">Name is required</span>
+            <span *ngIf="name.errors?.['pattern']">Name must contain alphabets only</span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            [(ngModel)]="selectedAgent.email"
+            name="email"
+            required
+            email
+            (input)="validateEmailUniqueness()"  
+            #email="ngModel"
+            placeholder="name@example.com"
+          />
+          <div class="error-text" *ngIf="(email.invalid || emailExists) && (email.touched || formSubmitted)">
+            <span *ngIf="email.errors?.['required']">Email is required</span>
+            <span *ngIf="email.errors?.['email']">Please enter a valid email address</span>
+            <span *ngIf="emailExists">Email already exists</span>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="phone">Phone:</label>
+          <input
+            type="text"
+            id="phone"
+            [(ngModel)]="selectedAgent.phone"
+            name="phone"
+            [pattern]="phonePattern"
+            #phone="ngModel"
+            placeholder="10 digits, numeric only"
+          />
+          <div class="error-text" *ngIf="phone.invalid && (phone.touched || formSubmitted)">
+            <span *ngIf="phone.errors?.['pattern']">Phone must be exactly 10 digits, numeric only (no spaces or special characters)</span>
+          </div>
+        </div>
+
+        <!-- Role field removed -->
+
+        <!-- Actions -->
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="agentForm.invalid || agentIdExists || emailExists"  
+        >
+          {{ isNew ? 'Add' : 'Update' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

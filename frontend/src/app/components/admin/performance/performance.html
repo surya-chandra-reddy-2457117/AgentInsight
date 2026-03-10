@@ -1,0 +1,58 @@
+<div class="performance-container">
+  <div class="sidebar">
+    <app-admin-sidebar></app-admin-sidebar>
+  </div>
+ 
+ 
+  <div class="main-content">
+    <h2 class="dashboard-title">Agent Performance Dashboard</h2>
+ 
+    <!-- Filter Form -->
+    <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="filter-form">
+      <label style="font-size: medium; font-weight: bold; color: black; ">Agent ID:</label>
+      <input type="text" formControlName="agentId" placeholder="Enter Agent ID">
+      <button type="submit">View Performance</button>
+    </form>
+ 
+    <!-- Agent Info -->
+    <div *ngIf="selectedAgent" class="agent-info">
+      <h3>Agent: {{ selectedAgent.name }} ({{ selectedAgent.agentid }})</h3>
+    </div>
+ 
+    <!-- Summary Section -->
+    <div *ngIf="selectedAgent" class="summary-cards">
+      <div class="card">Total Sales: ₹{{ totalAgentSales }}</div>
+      <div class="card">Total Incentives: ₹{{ totalAgentIncentives }}</div>
+    </div>
+ 
+    <!-- No Agent Selected Message -->
+    <div *ngIf="!selectedAgent" class="no-agent-message">
+      <p>Please enter an Agent ID to view performance details.</p>
+    </div>
+ 
+    <!-- Sales Details Table -->
+    <div *ngIf="selectedAgent">
+      <h3>Sales Details</h3>
+      <table class="performance-table">
+        <thead>
+          <tr>
+            <th>Sale ID</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sale of agentSales">
+            <td>{{ sale.saleid }}</td>
+            <td>₹{{ sale.saleamount }}</td>
+            <td>{{ sale.saledate }}</td>
+            <td>{{ sale.saletype }}</td>
+            <td>{{ sale.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

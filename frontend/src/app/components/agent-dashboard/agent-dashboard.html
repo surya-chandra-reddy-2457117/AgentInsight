@@ -1,0 +1,97 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <main class="dashboard-content">
+    <div class="dashboard-header">
+      <h1>Agent Dashboard</h1>
+      <a class="profile-icon" [routerLink]="['/agent/profile']" title="Go to profile">👤</a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div *ngFor="let stat of stats" class="stat-card">
+        <div class="stat-icon">{{ stat.icon }}</div>
+        <div class="stat-info">
+          <p class="stat-label">{{ stat.label }}</p>
+          <p class="stat-value">{{ stat.value }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- Recent Sales -->
+      <section class="card">
+        <div class="card-header">
+          <h2>Recent Sales</h2>
+          <a class="view-all" (click)="goToSales()">View All ></a>
+        </div>
+        <table class="sales-table">
+          <thead>
+            <tr>
+              <th>Policy</th>
+              <th>Date</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sale of recentSales">
+              <td>{{ sale.policyName || sale.policyid }}</td>
+              <td>{{ sale.saledate }}</td>
+              <td>{{ sale.saleamount | currency:'USD' }}</td>
+            </tr>
+            <tr *ngIf="!recentSales || recentSales.length === 0">
+              <td colspan="3">No recent sales</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Leaderboard -->
+      <section class="card">
+        <h2>Leaderboard</h2>
+        <div class="leaderboard-list">
+          <div *ngFor="let agent of leaderboard" class="leaderboard-item">
+            <span class="rank">{{ agent.rank }}</span>
+            <span class="agent-icon">👤</span>
+            <span class="agent-name">{{ agent.name }}</span>
+            <span class="score">{{ agent.score | currency:'USD' }}</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Sales Trend & Quick Links Row -->
+    <div class="dashboard-grid">
+      <!-- Sales Trend -->
+      <section class="card trend-card">
+        <h2>Sales Trend</h2>
+        <div class="chart-placeholder">
+          <svg viewBox="0 0 400 150" class="trend-chart" *ngIf="trendPath">
+            <polyline [attr.points]="trendPoints" 
+                      stroke="#0052cc" stroke-width="2" fill="none"/>
+            <circle *ngFor="let point of trendDataPoints" 
+                    [attr.cx]="point.x" [attr.cy]="point.y" r="3" fill="#0052cc"/>
+          </svg>
+          <div *ngIf="!trendPath" style="text-align:center; padding: 40px; color: #999;">
+            No sales data available
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Links -->
+      <section class="card">
+        <h2>Quick Links</h2>
+        <div class="quick-links">
+          <button class="quick-link-btn" (click)="goToSales()">
+            <span class="link-icon">+</span>
+            <span>Add Sale</span>
+          </button>
+          <button class="quick-link-btn" (click)="goToIncentives()">
+            <span class="link-icon">&gt;</span>
+            <span>View Incentives</span>
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
